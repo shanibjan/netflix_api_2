@@ -12,16 +12,22 @@ function NavBar(props) {
   const [action, setAction] = useState([]);
   const [doc, setDoc] = useState([]);
   const [horror, setHorror] = useState([]);
+  const [comedy, setComedy] = useState([]);
+  const [tv, setTv] = useState([]);
+  console.log(props);
+  
   const searchitems = useRef();
-  let merge = trend.concat(action, doc, horror);
-
+  let merge = trend.concat(action, doc, horror,comedy,tv);
+  console.log(merge);
+  
   setTimeout(() => {
     localStorage.setItem("all", JSON.stringify(merge));
   }, 100);
-  let relatedKeywordsData=[]
-merge.map((m)=>{
-  relatedKeywordsData.push(m.name || m.title)
-})
+  let relatedKeywordsData = [];
+  merge.map((m) => {
+    
+    relatedKeywordsData.push(m.name || m.title);
+  });
   const nav = useNavigate();
   useEffect(() => {
     axios.get(props.trending).then((response) => {
@@ -39,47 +45,52 @@ merge.map((m)=>{
     });
   }, []);
   useEffect(() => {
+    axios.get(props.comedy).then((response) => {
+      console.log();
+      setComedy(response.data.results);
+    });
+  }, []);
+  useEffect(() => {
     axios.get(props.horror).then((response) => {
       setHorror(response.data.results);
     });
   }, []);
+  useEffect(() => {
+    axios.get(props.tv).then((response) => {
+      
+      setTv(response.data.results);
+    });
+  }, []);
 
   function displayRelatedKeywords(keywords) {
-    // console.log(keywords);
     const relatedKeywordsContainer = document.getElementById("relatedKeywords");
-    
+
     relatedKeywordsContainer.innerHTML = "";
-    keywords.forEach(keyword => {
-        // console.log(keyword);
+    keywords.forEach((keyword) => {
       const keywordElement = document.createElement("div");
-      keywordElement.style.margin="30px"
-      keywordElement.addEventListener('click',()=>{
+      keywordElement.style.margin = "30px";
+      keywordElement.addEventListener("click", () => {
         const searchInput = document.getElementById("searchInput");
-        searchInput.value=keyword
-        relatedKeywordsContainer.style.display="none"
-      })
+        searchInput.value = keyword;
+        relatedKeywordsContainer.style.display = "none";
+      });
       keywordElement.textContent = keyword;
       relatedKeywordsContainer.appendChild(keywordElement);
     });
   }
-  
-  // Function to handle search input
   function handleSearchInput(event) {
     const searchQuery = event.target.value.toLowerCase();
-    const matchedKeywords = relatedKeywordsData.filter(keyword =>
+    const matchedKeywords = relatedKeywordsData.filter((keyword) =>
       keyword.toLowerCase().includes(searchQuery)
     );
-    // console.log(matchedKeywords);
     displayRelatedKeywords(matchedKeywords);
-//    console.log(matchedKeywords);
   }
-  
-  // Event listener for search input
+
   const searchInput = document.getElementById("searchInput");
   const relatedKeywordsContainer = document.getElementById("relatedKeywords");
-  if(searchInput != null){
-    searchInput.addEventListener("input", handleSearchInput,()=>{
-      relatedKeywordsContainer.style.display="block"
+  if (searchInput != null) {
+    searchInput.addEventListener("input", handleSearchInput, () => {
+      relatedKeywordsContainer.style.display = "block";
     });
   }
 
@@ -113,7 +124,12 @@ merge.map((m)=>{
         }}
       />
       <div className="placeSearch">
-        <input ref={searchitems} type="text" id="searchInput" placeholder="Search..." />
+        <input
+          ref={searchitems}
+          type="text"
+          id="searchInput"
+          placeholder="Search..."
+        />
         <div id="relatedKeywords"></div>
         <div onClick={shadowClick} className="search-lense">
           <FontAwesomeIcon icon={faSearch} />

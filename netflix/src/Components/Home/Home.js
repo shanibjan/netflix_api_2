@@ -26,6 +26,7 @@ function Home() {
         documents={documents}
         horror={horror}
         comedy={comedy}
+        tv={tv}
         userName={location}
       />
       

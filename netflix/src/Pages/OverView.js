@@ -15,6 +15,8 @@ let documents =
   "discover/movie?api_key=cf6943474b7b12c83b4f25bf4a0c76f8&with_genres=99";
 let horror =
   "discover/movie?api_key=cf6943474b7b12c83b4f25bf4a0c76f8&with_genres=27";
+  let tv='discover/tv?api_key=cf6943474b7b12c83b4f25bf4a0c76f8'
+let comedy='discover/movie?api_key=cf6943474b7b12c83b4f25bf4a0c76f8&with_genres=35'
 
 let API_KEY = "cf6943474b7b12c83b4f25bf4a0c76f8";
 function OverView() {
@@ -24,6 +26,7 @@ function OverView() {
   console.log(related);
   const nav = useNavigate();
   let details = JSON.parse(localStorage.getItem("search"));
+  console.log(details);
   let favouriteShows = JSON.parse(localStorage.getItem("favorite"));
   const imageUrl = "https://image.tmdb.org/t/p/original";
   const location = useLocation();
@@ -185,6 +188,8 @@ function OverView() {
         trending={trending}
         documents={documents}
         horror={horror}
+        comedy={comedy}
+        tv={tv}
         userName={location}
       />
       {details[0] ? (

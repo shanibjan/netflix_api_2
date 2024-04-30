@@ -46,6 +46,7 @@ div.placeSearch input{
 }
 .search-lense{
     color: aliceblue;
+    cursor: pointer;
 }
 .user-head{
     color: azure;
