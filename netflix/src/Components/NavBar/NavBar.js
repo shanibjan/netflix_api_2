@@ -18,6 +18,10 @@ function NavBar(props) {
   setTimeout(() => {
     localStorage.setItem("all", JSON.stringify(merge));
   }, 100);
+  let relatedKeywordsData=[]
+merge.map((m)=>{
+  relatedKeywordsData.push(m.name || m.title)
+})
   const nav = useNavigate();
   useEffect(() => {
     axios.get(props.trending).then((response) => {
@@ -39,6 +43,46 @@ function NavBar(props) {
       setHorror(response.data.results);
     });
   }, []);
+
+  function displayRelatedKeywords(keywords) {
+    // console.log(keywords);
+    const relatedKeywordsContainer = document.getElementById("relatedKeywords");
+    
+    relatedKeywordsContainer.innerHTML = "";
+    keywords.forEach(keyword => {
+        // console.log(keyword);
+      const keywordElement = document.createElement("div");
+      keywordElement.style.margin="30px"
+      keywordElement.addEventListener('click',()=>{
+        const searchInput = document.getElementById("searchInput");
+        searchInput.value=keyword
+        relatedKeywordsContainer.style.display="none"
+      })
+      keywordElement.textContent = keyword;
+      relatedKeywordsContainer.appendChild(keywordElement);
+    });
+  }
+  
+  // Function to handle search input
+  function handleSearchInput(event) {
+    const searchQuery = event.target.value.toLowerCase();
+    const matchedKeywords = relatedKeywordsData.filter(keyword =>
+      keyword.toLowerCase().includes(searchQuery)
+    );
+    // console.log(matchedKeywords);
+    displayRelatedKeywords(matchedKeywords);
+//    console.log(matchedKeywords);
+  }
+  
+  // Event listener for search input
+  const searchInput = document.getElementById("searchInput");
+  const relatedKeywordsContainer = document.getElementById("relatedKeywords");
+  if(searchInput != null){
+    searchInput.addEventListener("input", handleSearchInput,()=>{
+      relatedKeywordsContainer.style.display="block"
+    });
+  }
+
   const shadowClick = () => {
     let searchPro = searchitems.current.value;
     let split = searchPro.split(" ");
@@ -53,6 +97,9 @@ function NavBar(props) {
     });
     localStorage.setItem("search", JSON.stringify(res));
     nav("/over_view", { state: { name: props.userName.state.name } });
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   return (
@@ -66,8 +113,8 @@ function NavBar(props) {
         }}
       />
       <div className="placeSearch">
-        <input ref={searchitems} type="text" placeholder="Search..." />
-
+        <input ref={searchitems} type="text" id="searchInput" placeholder="Search..." />
+        <div id="relatedKeywords"></div>
         <div onClick={shadowClick} className="search-lense">
           <FontAwesomeIcon icon={faSearch} />
         </div>

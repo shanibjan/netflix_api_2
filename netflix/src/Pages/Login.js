@@ -32,7 +32,7 @@ function Login() {
       setTimeout(()=>{
         navigate("/home", { state: { name: userDetails.name } });
         window.location.reload();
-       },300)
+       },100)
 
     })
   }

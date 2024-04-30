@@ -27,6 +27,7 @@ div.placeSearch{
     align-items: center;
     display: flex;
     background-color: #15151a;
+    position: relative;
 }
 div.placeSearch input{
     border: none;
@@ -68,4 +69,19 @@ div.placeSearch input{
     color: azure;
     font-family: 'Gordita Regular';
     cursor: pointer;
+}
+#relatedKeywords{
+    
+    color: azure;
+    position: absolute;
+    top: 46px;
+    width: 100%;
+    font-size: 19px;
+    background-color: #15151a;
+    right: 0px;
+    overflow-y: scroll;
+    font-family: 'Gordita Regular';
+    text-align: left;
+    cursor: pointer;
+    max-height: 426px;
 }
